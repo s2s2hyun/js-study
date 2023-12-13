@@ -19,7 +19,6 @@
 // 155
 
 function solution(arr, n) {
-  // 안정된 최소값
   let answer = Number.MIN_SAFE_INTEGER;
   // 행 , 열
   let sum1 = (sum2 = 0);
