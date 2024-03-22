@@ -30,7 +30,7 @@ class Stack {
   pop() {
     try {
       return this.list.deleteAt(0);
-    } catch (e) {
+    } catch (error) {
       return null;
     }
   }

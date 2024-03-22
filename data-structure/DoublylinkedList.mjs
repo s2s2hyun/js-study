@@ -1,13 +1,17 @@
+// 이전에 작성한 연결리스트 코드는 다음 노드만 가리키도록 했는데 이전 노드도 참조할수 있도록 만들어야합니다.
+
 class Node {
-  constructor(data, next = null) {
+  constructor(data, next = null, prev = null) {
     this.data = data;
     this.next = next;
+    this.prev = prev;
   }
 }
 
-class LinkedList {
+class DoublyLinkedList {
   constructor() {
     this.head = null;
+    this.tail = null;
     this.count = 0;
   }
 
@@ -43,16 +47,32 @@ class LinkedList {
 
     if (index == 0) {
       newNode.next = this.head;
+
+      if (this.head != null) {
+        this.head.prev = newNode;
+      }
+
       this.head = newNode;
+    } else if (index == this.count) {
+      newNode.next = null;
+      newNode.prev = this.tail;
+
+      this.tail.next = newNode;
     } else {
       let currentNode = this.head;
       for (let i = 0; i < index - 1; i++) {
         currentNode = currentNode.next;
       }
       newNode.next = currentNode.next;
-
+      newNode.prev = currentNode;
       currentNode.next = newNode;
+      newNode.next.prev = newNode;
     }
+
+    if (newNode.next == null) {
+      this.tail = newNode;
+    }
+
     this.count++;
   }
 
@@ -70,23 +90,29 @@ class LinkedList {
     // 헤더부분을 제거하는 상황
     if (index == 0) {
       let deleteNode = this.head;
-
-      this.head = this.head.next;
-
+      if (this.head.next == null) {
+        this.head = null;
+        this.tail = null;
+      } else {
+        this.head = this.head.next;
+        this.head.prev = null;
+      }
       this.count--;
-
       return deleteNode;
-
-      // 그외 제거하는 상황 else
+    } else if (index == this.count - 1) {
+      let deleteNode = this.tail;
+      this.tail.prev.next = null;
+      this.tail = this.tail.prev;
+      this.count--;
+      return deleteNode;
     } else {
       for (let i = 0; i < index - 1; i++) {
         currentNode = currentNode.next;
       }
-
       let deleteNode = currentNode.next;
       currentNode.next = currentNode.next.next;
+      currentNode.next.prev = currentNode;
       this.count--;
-
       return deleteNode;
     }
   }
@@ -109,4 +135,4 @@ class LinkedList {
   }
 }
 
-export { Node, LinkedList };
+export { Node, DoublyLinkedList };
